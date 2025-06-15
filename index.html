@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alliance AMS - Welding Products with iTabs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    html, body {
+        height: 100%;
+        overflow-x: hidden;
+    }
+    
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: #ffffff;
+    }
+    
+    .demo-header {
+        background: linear-gradient(135deg, #003366 0%, #0066cc 100%);
+        color: white;
+        padding: 30px 20px;
+        text-align: center;
+    }
+    
+    .demo-title {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+    
+    .demo-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .comparison-section {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        margin: 30px 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border: 1px solid #e0e0e0;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+        color: #003366;
+        margin-bottom: 20px;
+        text-align: center;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+    
+    .before-after {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-top: 30px;
+    }
+    
+    .before-section, .after-section {
+        border-radius: 8px;
+        overflow: hidden;
+        border: 2px solid #e0e0e0;
+    }
+    
+    .before-section {
+        border-color: #cc6666;
+    }
+    
+    .after-section {
+        border-color: #669966;
+    }
+    
+    .section-header {
+        padding: 15px;
+        color: white;
+        font-weight: bold;
+        text-align: center;
+    }
+    
+    .before-header {
+        background: #cc6666;
+    }
+    
+    .after-header {
+        background: #669966;
+    }
+    
+    .product-listing {
+        background: #f8f9fa;
+        padding: 20px;
+        min-height: 400px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    .product-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        border-bottom: 1px solid #ddd;
+        background: white;
+        margin-bottom: 8px;
+        border-radius: 4px;
+    }
+    
+    .product-item:hover {
+        background: #f0f0f0;
+    }
+    
+    .product-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .product-code {
+        font-family: Arial, sans-serif;
+        font-weight: normal;
+        color: #333;
+        font-size: 14px;
+    }
+    
+    .i-indicator {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 18px;
+        height: 18px;
+        background: #0066cc;
+        color: white;
+        border-radius: 50%;
+        font-size: 11px;
+        font-style: italic;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-left: 6px;
+    }
+    
+    .i-indicator:hover {
+        transform: scale(1.1);
+        background: #0055aa;
+    }
+    
+    .quote-btn {
+        background: #666;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 12px;
+    }
+    
+    .quote-btn:hover {
+        background: #555;
+    }
+    
+    /* iTabs Popup */
+    .itabs-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        width: 500px;
+        max-width: 90vw;
+        max-height: 80vh;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        z-index: 1001;
+        display: none;
+        overflow: hidden;
+        border: 2px solid #0066cc;
+    }
+    
+    .itabs-popup.active {
+        display: block;
+        animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+        from { opacity: 0; transform: translate(-50%, -60%); }
+        to { opacity: 1; transform: translate(-50%, -50%); }
+    }
+    
+    .popup-header {
+        background: #0066cc;
+        color: white;
+        padding: 15px 20px;
+        position: relative;
+    }
+    
+    .popup-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .close-btn {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .close-btn:hover {
+        background: rgba(255,255,255,0.2);
+    }
+    
+    .popup-tabs {
+        display: flex;
+        background: #f0f0f0;
+        border-bottom: 1px solid #ddd;
+    }
+    
+    .popup-tab {
+        flex: 1;
+        padding: 10px 8px;
+        background: none;
+        border: none;
+        font-size: 12px;
+        font-weight: 600;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+    
+    .popup-tab:hover {
+        background: rgba(0, 102, 204, 0.1);
+        color: #0066cc;
+    }
+    
+    .popup-tab.active {
+        background: white;
+        color: #0066cc;
+        border-bottom: 2px solid #0066cc;
+    }
+    
+    .popup-content {
+        padding: 20px;
+        max-height: 350px;
+        overflow-y: auto;
+    }
+    
+    .tab-content {
+        display: none;
+    }
+    
+    .tab-content.active {
+        display: block;
+    }
+    
+    .product-image {
+        width: 100%;
+        max-width: 180px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+    }
+    
+    .spec-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 15px 0;
+        font-size: 13px;
+    }
+    
+    .spec-table th,
+    .spec-table td {
+        padding: 6px 10px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .spec-table th {
+        background: #f0f0f0;
+        font-weight: 600;
+        color: #003366;
+    }
+    
+    .price-highlight {
+        background: #e8f4e8;
+        padding: 15px;
+        border-radius: 6px;
+        margin: 15px 0;
+        text-align: center;
+        border: 1px solid #669966;
+    }
+    
+    .price-amount {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #669966;
+        margin-bottom: 5px;
+    }
+    
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        z-index: 1000;
+    }
+    
+    .demo-callout {
+        background: #fff9e6;
+        border: 1px solid #ffcc00;
+        border-radius: 6px;
+        padding: 20px;
+        margin: 20px 0;
+        text-align: center;
+    }
+    
+    .demo-callout h3 {
+        color: #cc6600;
+        margin-bottom: 10px;
+    }
+    
+    .demo-callout p {
+        color: #cc6600;
+        margin: 0;
+        font-size: 14px;
+    }
+    
+    .current-problem-msg {
+        background: #ffebee;
+        border: 1px solid #cc6666;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 10px 0;
+        color: #cc0000;
+        font-size: 13px;
+    }
+
+    /* iTabs Information Section */
+    .itabs-info-section {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 40px 30px;
+        border-radius: 8px;
+        margin: 30px 0;
+        border: 1px solid #dee2e6;
+    }
+
+    .itabs-logo {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .itabs-logo h2 {
+        font-size: 2.5rem;
+        color: #0066cc;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .itabs-tagline {
+        font-size: 1.2rem;
+        color: #6c757d;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin: 30px 0;
+    }
+
+    .feature-card {
+        background: white;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border-left: 4px solid #0066cc;
+    }
+
+    .feature-card h4 {
+        color: #003366;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .feature-icon {
+        font-size: 1.5rem;
+    }
+
+    .feature-card p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 10px;
+    }
+
+    .feature-card ul {
+        margin-left: 20px;
+        color: #666;
+    }
+
+    .feature-card li {
+        margin-bottom: 5px;
+    }
+
+    .smartlink-section {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        margin: 30px 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border: 2px solid #28a745;
+    }
+
+    .smartlink-header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .smartlink-header h3 {
+        color: #28a745;
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .smartlink-demo {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 20px;
+        margin: 20px 0;
+        font-family: monospace;
+        position: relative;
+    }
+
+    .smartlink-url {
+        background: #e9ecef;
+        padding: 10px 15px;
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+        font-size: 14px;
+        color: #495057;
+        margin-bottom: 15px;
+        word-break: break-all;
+    }
+
+    .smartlink-benefits {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 25px;
+    }
+
+    /* Smartlink Comparison Styles */
+    .smartlink-comparison {
+        margin: 25px 0;
+    }
+
+    .link-comparison {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        margin: 20px 0;
+    }
+
+    .link-demo {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        border: 2px solid #dee2e6;
+        transition: all 0.3s ease;
+    }
+
+    .link-demo.regular-link {
+        border-color: #dc3545;
+    }
+
+    .link-demo.smart-link {
+        border-color: #28a745;
+    }
+
+    .link-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .link-header h5 {
+        margin: 0;
+        color: #003366;
+    }
+
+    .link-icon {
+        font-size: 1.2rem;
+    }
+
+    .link-url {
+        background: #e9ecef;
+        padding: 12px 15px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 13px;
+        color: #495057;
+        margin-bottom: 15px;
+        word-break: break-all;
+        line-height: 1.4;
+    }
+
+    .smart-part {
+        background: #fff3cd;
+        padding: 2px 4px;
+        border-radius: 3px;
+        color: #856404;
+        font-weight: bold;
+    }
+
+    .demo-link-btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 15px;
+    }
+
+    .demo-link-btn.regular {
+        background: #dc3545;
+        color: white;
+    }
+
+    .demo-link-btn.regular:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+    }
+
+    .demo-link-btn.smart {
+        background: #28a745;
+        color: white;
+    }
+
+    .demo-link-btn.smart:hover {
+        background: #218838;
+        transform: translateY(-2px);
+    }
+
+    .link-result {
+        background: white;
+        padding: 15px;
+        border-radius: 6px;
+        border-left: 4px solid #dee2e6;
+        animation: slideDown 0.3s ease;
+    }
+
+    .link-result p {
+        margin: 8px 0;
+        font-size: 14px;
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Explanation Steps */
+    .smartlink-explanation {
+        background: white;
+        padding: 25px;
+        border-radius: 8px;
+        margin: 25px 0;
+        border: 1px solid #dee2e6;
+    }
+
+    .explanation-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .step {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .step-number {
+        background: #0066cc;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .step-content h5 {
+        margin: 0 0 8px 0;
+        color: #003366;
+    }
+
+    .step-content p {
+        margin: 0;
+        color: #666;
+        line-height: 1.5;
+    }
+
+    .step-content code {
+        background: #f8f9fa;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-family: monospace;
+        color: #e83e8c;
+        border: 1px solid #dee2e6;
+    }
+
+    .benefit-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 6px;
+        border-left: 3px solid #28a745;
+    }
+
+    .benefit-icon {
+        color: #28a745;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .benefit-text {
+        flex: 1;
+    }
+
+    .benefit-text h5 {
+        color: #003366;
+        margin-bottom: 5px;
+    }
+
+    .benefit-text p {
+        color: #666;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .cta-section {
+        text-align: center;
+        margin: 40px 0;
+        padding: 30px;
+        background: linear-gradient(135deg, #0066cc 0%, #003366 100%);
+        border-radius: 8px;
+        color: white;
+    }
+
+    .cta-section h3 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+
+    .cta-section p {
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+        opacity: 0.9;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .cta-btn {
+        background: white;
+        color: #0066cc;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .cta-btn:hover {
+        background: #f8f9fa;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .cta-btn.secondary {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+    }
+
+    .cta-btn.secondary:hover {
+        background: white;
+        color: #0066cc;
+    }
+    
+    @media (max-width: 768px) {
+        .before-after {
+            grid-template-columns: 1fr;
+        }
+        
+        .itabs-popup {
+            width: 95vw;
+            max-height: 85vh;
+        }
+        
+        .popup-content {
+            padding: 15px;
+            max-height: 300px;
+        }
+        
+        .popup-tab {
+            font-size: 11px;
+            padding: 8px 4px;
+        }
+
+        .features-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .smartlink-benefits {
+            grid-template-columns: 1fr;
+        }
+
+        .link-comparison {
+            grid-template-columns: 1fr;
+        }
+
+        .explanation-steps {
+            gap: 15px;
+        }
+
+        .step {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .step-number {
+            align-self: center;
+        }
+
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .cta-btn {
+            width: 200px;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="demo-header">
+        <h1 class="demo-title">Alliance AMS Welding Products</h1>
+        <p class="demo-subtitle">See how iTabs transforms your customer experience</p>
+    </div>
+
+```
+<div class="container">
+    <div class="comparison-section">
+        <h2 class="section-title">Before vs After: Customer Shopping Experience</h2>
+        
+        <div class="before-after">
+            <!-- BEFORE: Current Website -->
+            <div class="before-section">
+                <div class="section-header before-header">
+                    Current Website (Frustrating)
+                </div>
+                <div class="product-listing">
+                    <div class="product-item" onclick="showCurrentProblem()">
+                        <span class="product-code">2.5MM 308L 5KG</span>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                    <div class="product-item" onclick="showCurrentProblem()">
+                        <span class="product-code">3.2MM 316L 5KG</span>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                    <div class="product-item" onclick="showCurrentProblem()">
+                        <span class="product-code">4.0MM 7018 5KG</span>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                    <div class="product-item" onclick="showCurrentProblem()">
+                        <span class="product-code">2.4MM ER70S6 15KG</span>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                    <div class="product-item" onclick="showCurrentProblem()">
+                        <span class="product-code">1.6MM ER309LSI 5KG</span>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                    <div class="product-item" onclick="showCurrentProblem()">
+                        <span class="product-code">6013 3.2MM 5KG</span>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                    <div class="product-item" onclick="showCurrentProblem()">
+                        <span class="product-code">E71T-1 1.2MM 15KG</span>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                    <div class="product-item" onclick="showCurrentProblem()">
+                        <span class="product-code">ER4043 2.4MM 5KG</span>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                    <div class="current-problem-msg" style="display: none;" id="problemMessage">
+                        <strong>😤 This is the current customer experience:</strong><br>
+                        • Click on cryptic product code<br>
+                        • Get taken to useless page with same code<br>
+                        • No photos, specs, or pricing<br>
+                        • Have to call for basic information<br>
+                        • Many customers give up and go elsewhere
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AFTER: With iTabs -->
+            <div class="after-section">
+                <div class="section-header after-header">
+                    With iTabs (Helpful)
+                </div>
+                <div class="product-listing">
+                    <div class="product-item">
+                        <div class="product-info">
+                            <span class="product-code">2.5MM 308L 5KG</span>
+                            <span class="i-indicator" onclick="showPopup('stainless-rod')">i</span>
+                        </div>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info">
+                            <span class="product-code">3.2MM 316L 5KG</span>
+                            <span class="i-indicator" onclick="showPopup('marine-rod')">i</span>
+                        </div>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info">
+                            <span class="product-code">4.0MM 7018 5KG</span>
+                            <span class="i-indicator" onclick="showPopup('stick-rod')">i</span>
+                        </div>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info">
+                            <span class="product-code">2.4MM ER70S6 15KG</span>
+                            <span class="i-indicator" onclick="showPopup('mig-wire')">i</span>
+                        </div>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info">
+                            <span class="product-code">1.6MM ER309LSI 5KG</span>
+                            <span class="i-indicator" onclick="showPopup('dissimilar-rod')">i</span>
+                        </div>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info">
+                            <span class="product-code">6013 3.2MM 5KG</span>
+                            <span class="i-indicator" onclick="showPopup('general-rod')">i</span>
+                        </div>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info">
+                            <span class="product-code">E71T-1 1.2MM 15KG</span>
+                            <span class="i-indicator" onclick="showPopup('flux-wire')">i</span>
+                        </div>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-info">
+                            <span class="product-code">ER4043 2.4MM 5KG</span>
+                            <span class="i-indicator" onclick="showPopup('aluminum-rod')">i</span>
+                        </div>
+                        <button class="quote-btn">Add to quote</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-callout">
+            <h3>👆 Try Clicking the Products Above</h3>
+            <p>Left side shows current frustrating experience. Right side shows how small "i" buttons provide instant, helpful information without leaving the page!</p>
+        </div>
+    </div>
+
+    <!-- iTabs Information Section -->
+    <div class="itabs-info-section">
+        <div class="itabs-logo">
+            <h2>iTabs</h2>
+            <p class="itabs-tagline">Turn any website into a self-service product catalog</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4><span class="feature-icon">⚡</span> Instant Setup</h4>
+                <p>Add iTabs to your existing website in minutes. No redesign needed.</p>
+                <ul>
+                    <li>Simple JavaScript integration</li>
+                    <li>Works with any website platform</li>
+                    <li>No technical expertise required</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h4><span class="feature-icon">💰</span> Reduce Support Costs</h4>
+                <p>Customers get instant answers to common product questions.</p>
+                <ul>
+                    <li>Fewer "What is this product?" calls</li>
+                    <li>Reduce quote request processing time</li>
+                    <li>Less back-and-forth emails</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h4><span class="feature-icon">📈</span> Increase Conversions</h4>
+                <p>Informed customers buy more confidently and frequently.</p>
+                <ul>
+                    <li>Higher cart completion rates</li>
+                    <li>More accurate quote requests</li>
+                    <li>Faster buying decisions</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h4><span class="feature-icon">🎯</span> Perfect for B2B</h4>
+                <p>Designed specifically for complex industrial and technical products.</p>
+                <ul>
+                    <li>Technical specifications display</li>
+                    <li>Application guides</li>
+                    <li>Compatibility information</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Smartlink Section -->
+    <div class="smartlink-section">
+        <div class="smartlink-header">
+            <h3><span class="feature-icon">🔗</span> Smartlink Technology</h3>
+            <p>Share detailed product information anywhere with intelligent URLs</p>
+        </div>
+
+        <!-- Comparison Demo -->
+        <div class="smartlink-comparison">
+            <h4 style="margin-bottom: 20px; color: #003366; text-align: center;">See the Difference:</h4>
+            
+            <div class="link-comparison">
+                <div class="link-demo regular-link">
+                    <div class="link-header">
+                        <span class="link-icon">🔗</span>
+                        <h5>Regular Link (Frustrating)</h5>
+                    </div>
+                    <div class="link-url">
+                        https://allianceams.com.au/products/welding-rods
+                    </div>
+                    <button class="demo-link-btn regular" onclick="showRegularLinkDemo()">
+                        Try Regular Link →
+                    </button>
+                    <div class="link-result" id="regularResult" style="display: none;">
+                        <p>❌ Customer lands on page with hundreds of products</p>
+                        <p>❌ Must scroll and search for specific item</p>
+                        <p>❌ Still no detailed specs or pricing</p>
+                    </div>
+                </div>
+                
+                <div class="link-demo smart-link">
+                    <div class="link-header">
+                        <span class="link-icon">⚡</span>
+                        <h5>Smartlink (Helpful)</h5>
+                    </div>
+                    <div class="link-url">
+                        https://allianceams.com.au/products/welding-rods<span class="smart-part">?itab=2.5MM-308L-5KG</span>
+                    </div>
+                    <button class="demo-link-btn smart" onclick="showSmartLinkDemo()">
+                        Try Smartlink →
+                    </button>
+                    <div class="link-result" id="smartResult" style="display: none;">
+                        <p>✅ Page loads AND product popup opens automatically</p>
+                        <p>✅ Customer sees full specs, pricing, applications instantly</p>
+                        <p>✅ Ready to buy or request quote immediately</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="smartlink-explanation">
+            <h4 style="color: #003366; margin-bottom: 15px;">How Smartlinks Work:</h4>
+            <div class="explanation-steps">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <h5>Add Smart Parameter</h5>
+                        <p>The magic is in <code>?itab=2.5MM-308L-5KG</code> - this tells iTabs exactly which product to show</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <h5>Auto-Detection</h5>
+                        <p>When the page loads, iTabs detects the parameter and automatically opens the right product popup</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <h5>Instant Information</h5>
+                        <p>Customer gets immediate access to detailed product info without any clicking or searching</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="smartlink-benefits">
+            <div class="benefit-item">
+                <span class="benefit-icon">📧</span>
+                <div class="benefit-text">
+                    <h5>Email Marketing</h5>
+                    <p>Include Smartlinks in product newsletters - customers click and see full details immediately</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <span class="benefit-icon">📱</span>
+                <div class="benefit-text">
+                    <h5>Sales Team</h5>
+                    <p>Send customers specific product links during phone calls or follow-up messages</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <span class="benefit-icon">🔍</span>
+                <div class="benefit-text">
+                    <h5>Search & Social</h5>
+                    <p>Share detailed product information on social media or in search ads</p>
+                </div>
+            </div>
+            
+            <div class="benefit-item">
+                <span class="benefit-icon">📋</span>
+                <div class="benefit-text">
+                    <h5>Quotes & Proposals</h5>
+                    <p>Include Smartlinks in quotes so customers can review product specs later</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="cta-section">
+        <h3>Ready to Transform Your Customer Experience?</h3>
+        <p>See how iTabs can reduce support calls and increase sales for your business</p>
+        <div class="cta-buttons">
+            <a href="#" class="cta-btn">Get Free Demo</a>
+            <a href="#" class="cta-btn secondary">Learn More</a>
+        </div>
+    </div>
+</div>
+
+<!-- Overlay -->
+<div class="overlay" id="overlay"></div>
+
+<!-- Sample iTabs Popup -->
+<div class="itabs-popup" id="itabsPopup">
+    <div class="popup-header">
+        <h3 class="popup-title" id="popupTitle">Stainless Steel TIG Rod</h3>
+        <button class="close-btn" onclick="closePopup()">&times;</button>
+    </div>
+    
+    <div class="popup-tabs">
+        <button class="popup-tab active" onclick="switchTab('info')">Product Info</button>
+        <button class="popup-tab" onclick="switchTab('specs')">Specifications</button>
+        <button class="popup-tab" onclick="switchTab('pricing')">Pricing</button>
+        <button class="popup-tab" onclick="switchTab('applications')">Applications</button>
+    </div>
+    
+    <div class="popup-content">
+        <div id="info" class="tab-content active">
+            <div class="product-image" style="background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666; font-size: 14px;">
+                Welding Rod Image
+            </div>
+            <h4>2.5mm Stainless Steel TIG Welding Rod (308L)</h4>
+            <p><strong>Material:</strong> 308L Stainless Steel</p>
+            <p><strong>Process:</strong> TIG (GTAW) Welding</p>
+            <p><strong>Package:</strong> 5kg plastic tube</p>
+            <p><strong>Length:</strong> 1000mm rods</p>
+            <p>Premium quality stainless steel welding rods suitable for food grade, pharmaceutical, and general fabrication applications.</p>
+        </div>
+        
+        <div id="specs" class="tab-content">
+            <table class="spec-table">
+                <tr><th>Diameter</th><td>2.5mm</td></tr>
+                <tr><th>Grade</th><td>308L</td></tr>
+                <tr><th>AWS Classification</th><td>ER308L</td></tr>
+                <tr><th>Tensile Strength</th><td>550 MPa min</td></tr>
+                <tr><th>Elongation</th><td>35% min</td></tr>
+                <tr><th>Operating Current</th><td>70-90 Amps</td></tr>
+                <tr><th>Shielding Gas</th><td>Argon</td></tr>
+            </table>
+        </div>
+        
+        <div id="pricing" class="tab-content">
+            <div class="price-highlight">
+                <div class="price-amount">$89.50</div>
+                <div>Per 5kg tube (approx 50 rods)</div>
+            </div>
+            <p><strong>Stock Status:</strong> ✅ In Stock</p>
+            <p><strong>Delivery:</strong> Same day Perth metro, Next day WA regional</p>
+            <p><strong>Bulk Pricing:</strong> 10+ tubes: $84.50 each</p>
+            <p><strong>Trade Account:</strong> Additional 5% discount available</p>
+        </div>
+        
+        <div id="applications" class="tab-content">
+            <h4>Suitable Applications:</h4>
+            <ul>
+                <li>Food processing equipment</li>
+                <li>Pharmaceutical equipment</li>
+                <li>Chemical processing</li>
+                <li>Marine applications</li>
+                <li>Architectural stainless steel</li>
+                <li>General fabrication</li>
+            </ul>
+            <h4>Compatible Base Materials:</h4>
+            <ul>
+                <li>304 Stainless Steel</li>
+                <li>308 Stainless Steel</li>
+                <li>321 Stainless Steel</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showCurrentProblem() {
+        const msg = document.getElementById('problemMessage');
+        msg.style.display = 'block';
+        setTimeout(() => {
+            msg.style.display = 'none';
+        }, 5000);
+    }
+
+    function showRegularLinkDemo() {
+        const result = document.getElementById('regularResult');
+        result.style.display = 'block';
+        
+        // Hide after 4 seconds
+        setTimeout(() => {
+            result.style.display = 'none';
+        }, 4000);
+    }
+
+    function showSmartLinkDemo() {
+        const result = document.getElementById('smartResult');
+        result.style.display = 'block';
+        
+        // Also automatically open the iTabs popup to show the effect
+        setTimeout(() => {
+            showPopup('stainless-rod');
+        }, 1000);
+        
+        // Hide the result text after 4 seconds
+        setTimeout(() => {
+            result.style.display = 'none';
+        }, 4000);
+    }
+    
+    function showPopup(productType) {
+        const popup = document.getElementById('itabsPopup');
+        const overlay = document.getElementById('overlay');
+        const title = document.getElementById('popupTitle');
+        
+        // Update title based on product
+        const titles = {
+            'stainless-rod': 'Stainless Steel TIG Rod (308L)',
+            'marine-rod': 'Marine Grade Stainless Rod (316L)',
+            'stick-rod': 'Low Hydrogen Stick Electrode (7018)',
+            'mig-wire': 'Carbon Steel MIG Wire (ER70S-6)',
+            'dissimilar-rod': 'Dissimilar Metal Rod (ER309LSi)',
+            'general-rod': 'General Purpose Stick Rod (6013)',
+            'flux-wire': 'Flux Cored Wire (E71T-1)',
+            'aluminum-rod': 'Aluminum TIG Rod (ER4043)'
+        };
+        
+        title.textContent = titles[productType] || 'Welding Product';
+        
+        overlay.style.display = 'block';
+        popup.classList.add('active');
+        
+        // Reset to first tab
+        switchTab('info');
+    }
+    
+    function closePopup() {
+        const popup = document.getElementById('itabsPopup');
+        const overlay = document.getElementById('overlay');
+        
+        popup.classList.remove('active');
+        overlay.style.display = 'none';
+    }
+    
+    function switchTab(tabName) {
+        // Remove active from all tabs and contents
+        const tabs = document.querySelectorAll('.popup-tab');
+        const contents = document.querySelectorAll('.tab-content');
+        
+        tabs.forEach(tab => tab.classList.remove('active'));
+        contents.forEach(content => content.classList.remove('active'));
+        
+        // Add active to clicked tab and corresponding content
+        event.target.classList.add('active');
+        document.getElementById(tabName).classList.add('active');
+    }
+    
+    // Close popup when clicking overlay
+    document.getElementById('overlay').addEventListener('click', closePopup);
+    
+    // Ensure proper scrolling
+    document.addEventListener('DOMContentLoaded', function() {
+        // Make sure page is scrollable
+        document.body.style.minHeight = '100vh';
+    });
+</script>
+```
+
+</body>
+</html>
